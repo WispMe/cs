@@ -33,4 +33,7 @@ if($user){
             }
         }
     }
+    else{
+        header("location: ../index.php");
+    }
 }

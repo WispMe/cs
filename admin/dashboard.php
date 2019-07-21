@@ -158,7 +158,7 @@ require_once("../Config/privilegeadmin.php");
             <div class="col-lg-3 col-xs-6">
               <!-- small box -->
               <div class="info-box">
-                <span class="info-box-icon bg-red"><i class="fa fa-hdd-o"></i></span>
+                <span class="info-box-icon bg-aqua"><i class="fa fa-hdd-o"></i></span>
                 <div class="info-box-content">
                   <?php
                   //Ambil data total circuit
