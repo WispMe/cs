@@ -2,13 +2,17 @@
 require_once("../Config/auth.php");
 require '../Config/koneksi.php';
 require_once("../Config/privilegeadmin.php");
+
+if($_SESSION["nms"]["privilege"] = 1){
+  $pri = "Admin";
+}
 ?>
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>AdminLTE 2 | Dashboard</title>
+    <title>NetworkMS</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
@@ -65,24 +69,22 @@ require_once("../Config/privilegeadmin.php");
               <!-- User Account: style can be found in dropdown.less -->
               <li class="dropdown user user-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  <img src="../assets/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                  
                   <span class="hidden-xs"><?php echo $_SESSION["nms"]["username"] ?></span>
                 </a>
                 <ul class="dropdown-menu">
                   <!-- User image -->
                   <li class="user-header">
-                    <img src="../assets/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-                    <p>
-                      Alexander Pierce - Web Developer
-                      <small>Member since Nov. 2012</small>
+                    
+                    <p><?php echo $_SESSION["nms"]["firstname"] ?> 
+                      <?php echo $_SESSION["nms"]["lastname"] ?>
+                      <small><?php echo $pri ?></small>
                     </p>
                   </li>
                   
                   <!-- Menu Footer-->
                   <li class="user-footer">
-                    <div class="pull-left">
-                      <a href="#" class="btn btn-default btn-flat">Profile</a>
-                    </div>
+                    
                     <div class="pull-right">
                       <a class="btn btn-default btn-flat" href="../config/logout.php">Sign out</a>
                     </div>
@@ -126,14 +128,7 @@ require_once("../Config/privilegeadmin.php");
               </a>
               
             </li>
-            <li class="">
-              <a href="#">
-                <i class="fa fa-user"></i> <span>Profile</span>
-                
-              </a>
-              
-            </li>
-            
+    
           </ul>
         </section>
         <!-- /.sidebar -->
@@ -143,7 +138,7 @@ require_once("../Config/privilegeadmin.php");
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>
-          Dashboard
+          Live Dashboard
           <small></small>
           </h1>
           <ol class="breadcrumb">
@@ -157,38 +152,18 @@ require_once("../Config/privilegeadmin.php");
           <div class="row">
             <div class="col-lg-3 col-xs-6">
               <!-- small box -->
-              <div class="info-box">
-                <span class="info-box-icon bg-aqua"><i class="fa fa-hdd-o"></i></span>
-                <div class="info-box-content">
-                  <?php
-                  //Ambil data total circuit
-                  $sql_totalcircuit = "SELECT COUNT(*) as total FROM ip";
-                  $query_totalcircuit = mysqli_query($con, $sql_totalcircuit);
-                  $totalcircuit = mysqli_fetch_object($query_totalcircuit);
-                  ?>
-                  <span class="info-box-text">Total Circuit</span>
-                  <span class="info-box-number"><?php echo $totalcircuit->total; ?></span>
-                </div>
-                <!-- /.info-box-content -->
+              <div id="totalcircuit">
+                
               </div>
+              
               <!-- /.info-box -->
             </div>
             <div class="col-lg-3 col-xs-6">
               <!-- small box -->
-              <div class="info-box">
-                <span class="info-box-icon bg-red"><i class="fa  fa-power-off"></i></span>
-                <div class="info-box-content">
-                  <?php
-                  //Ambil data total circuit
-                  $sql_circuitdis= "SELECT COUNT(*) as total FROM ip WHERE status=0";
-                  $query_circuitdis = mysqli_query($con, $sql_circuitdis);
-                  $circuitdis = mysqli_fetch_object($query_circuitdis);
-                  ?>
-                  <span class="info-box-text">Circuit Disconnected</span>
-                  <span class="info-box-number"><?php echo $circuitdis->total; ?></span>
-                </div>
-                <!-- /.info-box-content -->
+              <div id="totalcircuit1">
+                
               </div>
+              
               <!-- /.info-box -->
             </div>
           </div>
@@ -200,6 +175,7 @@ require_once("../Config/privilegeadmin.php");
               <div class="box box-default collapsed-box">
                 <div class="box-header with-border">
                   <h3 class="box-title">Circuit Disconnected</h3>
+                  <a class="btn btn-info btn-sm" style="margin-left: 5px;" onclick="loadData1()"><i class="fa fa-refresh"></i></a>
                   <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
                     </button>
@@ -211,290 +187,314 @@ require_once("../Config/privilegeadmin.php");
                   <div class="box">
                     <!-- /.box-header -->
                     <div class="box-body">
-                      <?php
-                      $sql_data = "SELECT * FROM ip WHERE status = 0";
-                      $query_data = mysqli_query($con, $sql_data);
-                      ?>
-                      <table id="example1" class="table table-bordered table-striped">
-                        <thead>
-                          <tr>
-                            <th>SID</th>
-                            <th>Customer Name</th>
-                            <th>Layanan</th>
-                            <th>Witel</th>
-                            <th>Lokasi</th>
-                            <th>Koordinat</th>
-                            <th>IP</th>
-                            <th>Status</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <?php
-                          while($data = mysqli_fetch_object($query_data)) {
-                          ?>
-                          <tr>
-                            <td><?php echo $data->sid ?></td>
-                            <td><?php echo $data->customer ?></td>
-                            <td><?php echo $data->layanan ?></td>
-                            <td><?php echo $data->witel ?></td>
-                            <td><?php echo $data->lokasi ?></td>
-                            <td><?php echo $data->koordinat ?></td>
-                            <td><?php echo $data->ip ?></td>
-                            <?php
-                            if($data->status==0){
-                            echo "<td style='color:red'>Disconnected</td>";
-                            }
-                            else{
-                            echo "<td style='color:green'>Connected</td>";
-                            }
-                            ?>
-                          </tr>
-                        <?php } ?>
-                          
-                        </tbody>
-                      </table>
+                      <div id="content1">
+                        
+                      </div>
                     </div>
                     <!-- /.box-body -->
                   </div>
                   
                   <!-- /.Left col -->
                 </div>
-                <!-- /.row (main row) -->
-              </section>
-              <!-- /.content -->
+              </div>
             </div>
-            <!-- /.content-wrapper -->
-            <footer class="main-footer">
-              <div class="pull-right hidden-xs">
-                <b>Version</b> 2.4.13
-              </div>
-              <strong>Copyright &copy; 2014-2019 <a href="https://adminlte.io">AdminLTE</a>.</strong> All rights
-              reserved.
-            </footer>
-            <!-- Control Sidebar -->
-            <aside class="control-sidebar control-sidebar-dark" style="display: none;">
-              <!-- Create the tabs -->
-              <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-                <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
-                <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
-              </ul>
-              <!-- Tab panes -->
-              <div class="tab-content">
-                <!-- Home tab content -->
-                <div class="tab-pane" id="control-sidebar-home-tab">
-                  <h3 class="control-sidebar-heading">Recent Activity</h3>
-                  <ul class="control-sidebar-menu">
-                    <li>
-                      <a href="javascript:void(0)">
-                        <i class="menu-icon fa fa-birthday-cake bg-red"></i>
-                        <div class="menu-info">
-                          <h4 class="control-sidebar-subheading">Langdon's Birthday</h4>
-                          <p>Will be 23 on April 24th</p>
-                        </div>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0)">
-                        <i class="menu-icon fa fa-user bg-yellow"></i>
-                        <div class="menu-info">
-                          <h4 class="control-sidebar-subheading">Frodo Updated His Profile</h4>
-                          <p>New phone +1(800)555-1234</p>
-                        </div>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0)">
-                        <i class="menu-icon fa fa-envelope-o bg-light-blue"></i>
-                        <div class="menu-info">
-                          <h4 class="control-sidebar-subheading">Nora Joined Mailing List</h4>
-                          <p>nora@example.com</p>
-                        </div>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0)">
-                        <i class="menu-icon fa fa-file-code-o bg-green"></i>
-                        <div class="menu-info">
-                          <h4 class="control-sidebar-subheading">Cron Job 254 Executed</h4>
-                          <p>Execution time 5 seconds</p>
-                        </div>
-                      </a>
-                    </li>
-                  </ul>
-                  <!-- /.control-sidebar-menu -->
-                  <h3 class="control-sidebar-heading">Tasks Progress</h3>
-                  <ul class="control-sidebar-menu">
-                    <li>
-                      <a href="javascript:void(0)">
-                        <h4 class="control-sidebar-subheading">
-                        Custom Template Design
-                        <span class="label label-danger pull-right">70%</span>
-                        </h4>
-                        <div class="progress progress-xxs">
-                          <div class="progress-bar progress-bar-danger" style="width: 70%"></div>
-                        </div>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0)">
-                        <h4 class="control-sidebar-subheading">
-                        Update Resume
-                        <span class="label label-success pull-right">95%</span>
-                        </h4>
-                        <div class="progress progress-xxs">
-                          <div class="progress-bar progress-bar-success" style="width: 95%"></div>
-                        </div>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0)">
-                        <h4 class="control-sidebar-subheading">
-                        Laravel Integration
-                        <span class="label label-warning pull-right">50%</span>
-                        </h4>
-                        <div class="progress progress-xxs">
-                          <div class="progress-bar progress-bar-warning" style="width: 50%"></div>
-                        </div>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0)">
-                        <h4 class="control-sidebar-subheading">
-                        Back End Framework
-                        <span class="label label-primary pull-right">68%</span>
-                        </h4>
-                        <div class="progress progress-xxs">
-                          <div class="progress-bar progress-bar-primary" style="width: 68%"></div>
-                        </div>
-                      </a>
-                    </li>
-                  </ul>
-                  <!-- /.control-sidebar-menu -->
-                </div>
-                <!-- /.tab-pane -->
-                <!-- Stats tab content -->
-                <div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
-                <!-- /.tab-pane -->
-                <!-- Settings tab content -->
-                <div class="tab-pane" id="control-sidebar-settings-tab">
-                  <form method="post">
-                    <h3 class="control-sidebar-heading">General Settings</h3>
-                    <div class="form-group">
-                      <label class="control-sidebar-subheading">
-                        Report panel usage
-                        <input type="checkbox" class="pull-right" checked>
-                      </label>
-                      <p>
-                        Some information about this general settings option
-                      </p>
-                    </div>
-                    <!-- /.form-group -->
-                    <div class="form-group">
-                      <label class="control-sidebar-subheading">
-                        Allow mail redirect
-                        <input type="checkbox" class="pull-right" checked>
-                      </label>
-                      <p>
-                        Other sets of options are available
-                      </p>
-                    </div>
-                    <!-- /.form-group -->
-                    <div class="form-group">
-                      <label class="control-sidebar-subheading">
-                        Expose author name in posts
-                        <input type="checkbox" class="pull-right" checked>
-                      </label>
-                      <p>
-                        Allow the user to show his name in blog posts
-                      </p>
-                    </div>
-                    <!-- /.form-group -->
-                    <h3 class="control-sidebar-heading">Chat Settings</h3>
-                    <div class="form-group">
-                      <label class="control-sidebar-subheading">
-                        Show me as online
-                        <input type="checkbox" class="pull-right" checked>
-                      </label>
-                    </div>
-                    <!-- /.form-group -->
-                    <div class="form-group">
-                      <label class="control-sidebar-subheading">
-                        Turn off notifications
-                        <input type="checkbox" class="pull-right">
-                      </label>
-                    </div>
-                    <!-- /.form-group -->
-                    <div class="form-group">
-                      <label class="control-sidebar-subheading">
-                        Delete chat history
-                        <a href="javascript:void(0)" class="text-red pull-right"><i class="fa fa-trash-o"></i></a>
-                      </label>
-                    </div>
-                    <!-- /.form-group -->
-                  </form>
-                </div>
-                <!-- /.tab-pane -->
-              </div>
-            </aside>
-            <!-- /.control-sidebar -->
-            <!-- Add the sidebar's background. This div must be placed
-            immediately after the control sidebar -->
-            <div class="control-sidebar-bg"></div>
           </div>
-          <!-- ./wrapper -->
-          <!-- jQuery 3 -->
-          <script src="../assets/bower_components/jquery/dist/jquery.min.js"></script>
-          <!-- jQuery UI 1.11.4 -->
-          <script src="../assets/bower_components/jquery-ui/jquery-ui.min.js"></script>
-          <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-          <script>
-          $.widget.bridge('uibutton', $.ui.button);
-          </script>
-          <!-- Bootstrap 3.3.7 -->
-          <script src="../assets/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-          <!-- Morris.js charts -->
-          <script src="../assets/bower_components/raphael/raphael.min.js"></script>
-          <script src="../assets/bower_components/morris.js/morris.min.js"></script>
-          <!-- Sparkline -->
-          <script src="../assets/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
-          <!-- jvectormap -->
-          <script src="../assets/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
-          <script src="../assets/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
-          <!-- jQuery Knob Chart -->
-          <script src="../assets/bower_components/jquery-knob/dist/jquery.knob.min.js"></script>
-          <!-- daterangepicker -->
-          <script src="../assets/bower_components/moment/min/moment.min.js"></script>
-          <script src="../assets/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
-          <!-- datepicker -->
-          <script src="../assets/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
-          <!-- Bootstrap WYSIHTML5 -->
-          <script src="../assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
-          <!-- Slimscroll -->
-          <script src="../assets/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-          <!-- FastClick -->
-          <script src="../assets/bower_components/fastclick/lib/fastclick.js"></script>
-          <!-- AdminLTE App -->
-          <script src="../assets/dist/js/adminlte.min.js"></script>
-          <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-          <script src="../assets/dist/js/pages/dashboard.js"></script>
-          <!-- AdminLTE for demo purposes -->
-          <script src="../assets/dist/js/demo.js"></script>
-          <!-- DataTables -->
-          <script src="../assets/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
-          <script src="../assets/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-          <!-- page script -->
-          <script>
-          $(function () {
-          $('#example1').DataTable()
-          $('#example2').DataTable({
-          'paging'      : true,
-          'lengthChange': false,
-          'searching'   : false,
-          'ordering'    : true,
-          'info'        : true,
-          'autoWidth'   : false
-          })
-          })
-          </script>
-        </body>
-      </html>
+          <!-- /.row (main row) -->
+          <div class="row">
+            <!-- Left col -->
+            <div class="col-md-12">
+              <div class="box box-default collapsed-box">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Circuit Connected</h3>
+                  <a class="btn btn-info btn-sm" style="margin-left: 5px;" onclick="loadData()"><i class="fa fa-refresh"></i></a>
+                  <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+                    </button>
+                  </div>
+                  <!-- /.box-tools -->
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                  <div class="box">
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                      <div id="content">
+                        
+                      </div>
+                    </div>
+                    <!-- /.box-body -->
+                  </div>
+                  
+                  <!-- /.Left col -->
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </section>
+        <!-- /.content -->
+      </div>
+      <!-- /.content-wrapper -->
+      <footer class="main-footer">
+        <div class="pull-right hidden-xs">
+          <b>Version</b> 2.4.13
+        </div>
+        <strong>Copyright &copy; 2014-2019 <a href="https://adminlte.io">AdminLTE</a>.</strong> All rights
+        reserved.
+      </footer>
+      <!-- Control Sidebar -->
+      <aside class="control-sidebar control-sidebar-dark" style="display: none;">
+        <!-- Create the tabs -->
+        
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <!-- Home tab content -->
+          <div class="tab-pane" id="control-sidebar-home-tab">
+            <h3 class="control-sidebar-heading">Recent Activity</h3>
+            <ul class="control-sidebar-menu">
+              <li>
+                <a href="javascript:void(0)">
+                  <i class="menu-icon fa fa-birthday-cake bg-red"></i>
+                  <div class="menu-info">
+                    <h4 class="control-sidebar-subheading">Langdon's Birthday</h4>
+                    <p>Will be 23 on April 24th</p>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="javascript:void(0)">
+                  <i class="menu-icon fa fa-user bg-yellow"></i>
+                  <div class="menu-info">
+                    <h4 class="control-sidebar-subheading">Frodo Updated His Profile</h4>
+                    <p>New phone +1(800)555-1234</p>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="javascript:void(0)">
+                  <i class="menu-icon fa fa-envelope-o bg-light-blue"></i>
+                  <div class="menu-info">
+                    <h4 class="control-sidebar-subheading">Nora Joined Mailing List</h4>
+                    <p>nora@example.com</p>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="javascript:void(0)">
+                  <i class="menu-icon fa fa-file-code-o bg-green"></i>
+                  <div class="menu-info">
+                    <h4 class="control-sidebar-subheading">Cron Job 254 Executed</h4>
+                    <p>Execution time 5 seconds</p>
+                  </div>
+                </a>
+              </li>
+            </ul>
+            <!-- /.control-sidebar-menu -->
+            <h3 class="control-sidebar-heading">Tasks Progress</h3>
+            <ul class="control-sidebar-menu">
+              <li>
+                <a href="javascript:void(0)">
+                  <h4 class="control-sidebar-subheading">
+                  Custom Template Design
+                  <span class="label label-danger pull-right">70%</span>
+                  </h4>
+                  <div class="progress progress-xxs">
+                    <div class="progress-bar progress-bar-danger" style="width: 70%"></div>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="javascript:void(0)">
+                  <h4 class="control-sidebar-subheading">
+                  Update Resume
+                  <span class="label label-success pull-right">95%</span>
+                  </h4>
+                  <div class="progress progress-xxs">
+                    <div class="progress-bar progress-bar-success" style="width: 95%"></div>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="javascript:void(0)">
+                  <h4 class="control-sidebar-subheading">
+                  Laravel Integration
+                  <span class="label label-warning pull-right">50%</span>
+                  </h4>
+                  <div class="progress progress-xxs">
+                    <div class="progress-bar progress-bar-warning" style="width: 50%"></div>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="javascript:void(0)">
+                  <h4 class="control-sidebar-subheading">
+                  Back End Framework
+                  <span class="label label-primary pull-right">68%</span>
+                  </h4>
+                  <div class="progress progress-xxs">
+                    <div class="progress-bar progress-bar-primary" style="width: 68%"></div>
+                  </div>
+                </a>
+              </li>
+            </ul>
+            <!-- /.control-sidebar-menu -->
+          </div>
+          <!-- /.tab-pane -->
+          <!-- Stats tab content -->
+          <div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
+          <!-- /.tab-pane -->
+          <!-- Settings tab content -->
+          <div class="tab-pane" id="control-sidebar-settings-tab">
+            <form method="post">
+              <h3 class="control-sidebar-heading">General Settings</h3>
+              <div class="form-group">
+                <label class="control-sidebar-subheading">
+                  Report panel usage
+                  <input type="checkbox" class="pull-right" checked>
+                </label>
+                <p>
+                  Some information about this general settings option
+                </p>
+              </div>
+              <!-- /.form-group -->
+              <div class="form-group">
+                <label class="control-sidebar-subheading">
+                  Allow mail redirect
+                  <input type="checkbox" class="pull-right" checked>
+                </label>
+                <p>
+                  Other sets of options are available
+                </p>
+              </div>
+              <!-- /.form-group -->
+              <div class="form-group">
+                <label class="control-sidebar-subheading">
+                  Expose author name in posts
+                  <input type="checkbox" class="pull-right" checked>
+                </label>
+                <p>
+                  Allow the user to show his name in blog posts
+                </p>
+              </div>
+              <!-- /.form-group -->
+              <h3 class="control-sidebar-heading">Chat Settings</h3>
+              <div class="form-group">
+                <label class="control-sidebar-subheading">
+                  Show me as online
+                  <input type="checkbox" class="pull-right" checked>
+                </label>
+              </div>
+              <!-- /.form-group -->
+              <div class="form-group">
+                <label class="control-sidebar-subheading">
+                  Turn off notifications
+                  <input type="checkbox" class="pull-right">
+                </label>
+              </div>
+              <!-- /.form-group -->
+              <div class="form-group">
+                <label class="control-sidebar-subheading">
+                  Delete chat history
+                  <a href="javascript:void(0)" class="text-red pull-right"><i class="fa fa-trash-o"></i></a>
+                </label>
+              </div>
+              <!-- /.form-group -->
+            </form>
+          </div>
+          <!-- /.tab-pane -->
+        </div>
+      </aside>
+      <!-- /.control-sidebar -->
+      <!-- Add the sidebar's background. This div must be placed
+      immediately after the control sidebar -->
+      <div class="control-sidebar-bg"></div>
+    </div>
+    <!-- ./wrapper -->
+    <!-- jQuery 3 -->
+    <script src="../assets/bower_components/jquery/dist/jquery.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="../assets/bower_components/jquery-ui/jquery-ui.min.js"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+    $.widget.bridge('uibutton', $.ui.button);
+    </script>
+    <!-- Bootstrap 3.3.7 -->
+    <script src="../assets/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- Morris.js charts -->
+    <script src="../assets/bower_components/raphael/raphael.min.js"></script>
+    <script src="../assets/bower_components/morris.js/morris.min.js"></script>
+    <!-- Sparkline -->
+    <script src="../assets/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
+    <!-- jvectormap -->
+    <script src="../assets/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+    <script src="../assets/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+    <!-- jQuery Knob Chart -->
+    <script src="../assets/bower_components/jquery-knob/dist/jquery.knob.min.js"></script>
+    <!-- daterangepicker -->
+    <script src="../assets/bower_components/moment/min/moment.min.js"></script>
+    <script src="../assets/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+    <!-- datepicker -->
+    <script src="../assets/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+    <!-- Bootstrap WYSIHTML5 -->
+    <script src="../assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+    <!-- Slimscroll -->
+    <script src="../assets/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+    <!-- FastClick -->
+    <script src="../assets/bower_components/fastclick/lib/fastclick.js"></script>
+    <!-- AdminLTE App -->
+    <script src="../assets/dist/js/adminlte.min.js"></script>
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="../assets/dist/js/pages/dashboard.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="../assets/dist/js/demo.js"></script>
+    <!-- DataTables -->
+    <script src="../assets/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="../assets/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <!-- page script -->
+    
+    
+    <script type="text/javascript">
+    $(document).ready(function(){
+    loadData();
+    })
+    function loadData(){
+    $.get('connectedtable.php', function(data){
+    $('#content').html(data)})
+    //setTimeout(loadData, 10000)
+    };
+    </script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+    loadData1();
+    })
+    function loadData1(){
+    $.get('disconnectedtable.php', function(data){
+    $('#content1').html(data)})
+    //setTimeout(loadData, 10000)
+    };
+    </script>
+    
+    <script type="text/javascript">
+    $(document).ready(function(){
+    total();
+    })
+    function total(){
+    $.get('totallive.php', function(data){
+    $('#totalcircuit').html(data)})
+    setTimeout(total, 1000)
+    };
+    </script>
+
+    <script type="text/javascript">
+    $(document).ready(function(){
+    total1();
+    })
+    function total1(){
+    $.get('totallive1.php', function(data){
+    $('#totalcircuit1').html(data)})
+    setTimeout(total1, 1000)
+    };
+    </script>
+
+  </body>
+</html>

@@ -4,13 +4,27 @@ require_once("../Config/privilegeadmin.php");
 include("../Config/koneksi.php");
 //ambil id dari query string
 $grup = $_GET['grup'];
+
+//menampilkan judul grup
+$sql_judul = "SELECT grup FROM ip WHERE grup='$grup'";
+$query_judul = mysqli_query($con, $sql_judul);
+$judul = mysqli_fetch_object($query_judul);
+
+//cek jika grup tersebut ada
+if($judul->grup != $grup){
+  //jika tidak ada akan kembali ke ke halaman sebelumnya
+  header("location: circuitdata.php");
+}
+if($_SESSION["nms"]["privilege"] = 1){
+  $pri = "Admin";
+}
 ?>
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>AdminLTE 2 | Dashboard</title>
+    <title>NetworkMS</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
@@ -67,24 +81,22 @@ $grup = $_GET['grup'];
               <!-- User Account: style can be found in dropdown.less -->
               <li class="dropdown user user-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  <img src="../assets/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                  
                   <span class="hidden-xs"><?php echo $_SESSION["nms"]["username"] ?></span>
                 </a>
                 <ul class="dropdown-menu">
                   <!-- User image -->
                   <li class="user-header">
-                    <img src="../assets/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-                    <p>
-                      Alexander Pierce - Web Developer
-                      <small>Member since Nov. 2012</small>
+                    
+                    <p><?php echo $_SESSION["nms"]["firstname"] ?> 
+                      <?php echo $_SESSION["nms"]["lastname"] ?>
+                      <small><?php echo $pri ?></small>
                     </p>
                   </li>
                   
                   <!-- Menu Footer-->
                   <li class="user-footer">
-                    <div class="pull-left">
-                      <a href="#" class="btn btn-default btn-flat">Profile</a>
-                    </div>
+                    
                     <div class="pull-right">
                       <a href="../config/logout.php" class="btn btn-default btn-flat">Sign out</a>
                     </div>
@@ -128,14 +140,7 @@ $grup = $_GET['grup'];
               </a>
               
             </li>
-            <li class="">
-              <a href="#">
-                <i class="fa fa-user"></i> <span>Profile</span>
-                
-              </a>
-              
-            </li>
-            
+   
             
           </ul>
         </section>
@@ -162,9 +167,6 @@ $grup = $_GET['grup'];
             <div class="box">
               <div class="box-header">
                 <h3 class="box-title"><?php
-                $sql_judul = "SELECT grup FROM ip WHERE grup='$grup'";
-                $query_judul = mysqli_query($con, $sql_judul);
-                $judul = mysqli_fetch_object($query_judul);
                 echo $judul->grup;
                 ?></h3>
                 
@@ -236,11 +238,6 @@ $grup = $_GET['grup'];
       </footer>
       <!-- Control Sidebar -->
       <aside class="control-sidebar control-sidebar-dark" style="display: none;">
-        <!-- Create the tabs -->
-        <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-          <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
-          <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
-        </ul>
         <!-- Tab panes -->
         <div class="tab-content">
           <!-- Home tab content -->

@@ -2,13 +2,16 @@
 require_once("../Config/auth.php");
 require_once("../Config/privilegeadmin.php");
 include("../Config/koneksi.php");
+if($_SESSION["nms"]["privilege"] = 1){
+  $pri = "Admin";
+}
 ?>
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>AdminLTE 2 | Dashboard</title>
+    <title>NetworkMS</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
@@ -63,26 +66,21 @@ include("../Config/koneksi.php");
             <ul class="nav navbar-nav">
               <!-- Messages: style can be found in dropdown.less-->
               <!-- User Account: style can be found in dropdown.less -->
-              <li class="dropdown user user-menu">
+              <li class="dropdown user-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  <img src="../assets/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
                   <span class="hidden-xs"><?php echo $_SESSION["nms"]["username"] ?></span>
                 </a>
                 <ul class="dropdown-menu">
                   <!-- User image -->
                   <li class="user-header">
-                    <img src="../assets/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-                    <p>
-                      Alexander Pierce - Web Developer
-                      <small>Member since Nov. 2012</small>
+                    <p><?php echo $_SESSION["nms"]["firstname"] ?> 
+                      <?php echo $_SESSION["nms"]["lastname"] ?>
+                      <small><?php echo $pri ?></small>
                     </p>
                   </li>
                   
                   <!-- Menu Footer-->
                   <li class="user-footer">
-                    <div class="pull-left">
-                      <a href="#" class="btn btn-default btn-flat">Profile</a>
-                    </div>
                     <div class="pull-right">
                       <a href="../config/logout.php" class="btn btn-default btn-flat">Sign out</a>
                     </div>
@@ -126,14 +124,8 @@ include("../Config/koneksi.php");
               </a>
               
             </li>
-            <li class="">
-              <a href="#">
-                <i class="fa fa-user"></i> <span>Profile</span>
-                
-              </a>
-              
-            </li>
-           
+
+            
             
           </ul>
         </section>
@@ -150,7 +142,7 @@ include("../Config/koneksi.php");
           <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-folder"></i> Home</a></li>
             <li class="active">User Data</li>
-          
+            
           </ol>
         </section>
         <!-- Main content -->
@@ -170,10 +162,12 @@ include("../Config/koneksi.php");
                   <thead>
                     <tr>
                       <th>No</th>
+                      <th>First Name</th>
+                      <th>Last Name</th>
                       <th>Username</th>
-                      <th>Password</th>
+                      <th>Telephone Number</th>
                       <th>Privilege</th>
-                      
+                      <th>Access Grup</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -186,21 +180,23 @@ include("../Config/koneksi.php");
                     ?>
                     <tr>
                       <td><?php echo $no++ ?></td>
+                      <td><?php echo $data->firstname ?></td>
+                      <td><?php echo $data->lastname ?></td>
                       <td><?php echo $data->username ?></td>
-                      <td><?php echo $data->password ?></td>
-                      <td><?php 
-
-                      if($data->privilege==0){
+                      <td><?php echo $data->telephone ?></td>
+                      <td><?php
+                        if($data->privilege==0){
                         echo "User";
-                      }
-                      else{
+                        }
+                        else{
                         echo "Admin";
-                      }
-
-                       ?></td>
+                        }
+                      ?></td>
+                      <td><?php echo $data->grup ?></td>
                       <td class="text-center d-flex justify-content-around">
                         
                       </td>
+
                     </tr>
                     <?php } ?>
                     
@@ -224,11 +220,7 @@ include("../Config/koneksi.php");
       </footer>
       <!-- Control Sidebar -->
       <aside class="control-sidebar control-sidebar-dark" style="display: none;">
-        <!-- Create the tabs -->
-        <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-          <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
-          <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
-        </ul>
+        
         <!-- Tab panes -->
         <div class="tab-content">
           <!-- Home tab content -->
@@ -466,100 +458,65 @@ include("../Config/koneksi.php");
             <div class="box-body">
               <form role="form" action="add_user.php" method="post">
                 <!-- text input -->
-                <div class="form-group">
-                  <label>Username</label>
-                  <input type="text" class="form-control" placeholder="Username" name="username" required>
+                
+                <div class="form-row">
+                  <div class="col-md-6">
+                    <div class="form-group"><label for="firstname"><strong>First Name</strong></label><input class="form-control" type="text" name="firstname"></div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group"><label for="lastname"><strong>Last Name</strong></label><input class="form-control" type="text"  name="lastname">
+                  </div>
                 </div>
-                <div class="form-group">
-                  <label>Password</label>
-                  <input type="password" class="form-control" placeholder="Password" name="password" required>
-                </div>
-                <div class="form-group">
-                  <label>Privilege</label>
-                  <select class="form-control" name="privilege">
-                    <option value="1" >Admin</option>
-                    <option value="0" >User</option>
+              </div>
+              
+              
+              <div class="form-group col-md-12">
+                <label>Username</label>
+                <input type="text" class="form-control" placeholder="Username" name="username" required>
+              </div>
+              <div class="form-group col-md-12">
+                <label>Password</label>
+                <input type="password" class="form-control" placeholder="Password" name="password" required>
+              </div>
+              <div class="form-group col-md-12">
+                <label>Telephone Number</label>
+                <input type="text" class="form-control" placeholder="Telephone Number" name="telephone" required>
+              </div>
+              <div class="form-group col-md-12">
+                <label>Privilege</label>
+                <select class="form-control" name="privilege" onchange="if (this.selectedIndex== 0){
+                  document.getElementById('grup').style.visibility='hidden'}else{
+                  document.getElementById('grup').style.visibility='visible'}">
+                  <option value="1" >Admin</option>
+                  <option value="0" >User</option>
+                </select>
+              </div>
+              <div class="form-group col-md-12">
+                <div id="grup" style="visibility:hidden;">
+                  <label name="grup">Access Grup</label>
+                  <select class="form-control" name="grup">
+                    <?php
+                    $sql_grup = "SELECT grup FROM ip GROUP BY grup";
+                    $query_grup = mysqli_query($con, $sql_grup);
+                    while($result_grup = mysqli_fetch_object($query_grup)){
+                    ?>
+                    <option value="<?php echo $result_grup->grup ?>" ><?php echo $result_grup->grup ?></option>
+                  <?php } ?>
                   </select>
                 </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="submit" name="submit" class="btn btn-primary">Submit</button>
-                </div>
-                
-              </form>
-            </div>
-            <!-- /.box-body -->
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+              </div>
+              
+            </form>
           </div>
-        </div>
-        
-      </div>
-    </div>
-  </div>
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <div class="box-header with-border">
-            <h3 class="box-title">Edit SID</h3>
-          </div>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <!-- general form elements disabled -->
-          <div class="box box-warning">
-            
-            <!-- /.box-header -->
-            <div class="box-body">
-              <form role="form">
-                <!-- text input -->
-                <div class="form-group">
-                  <label>SID</label>
-                  <input type="text" class="form-control" placeholder="Enter ...">
-                </div>
-                <div class="form-group">
-                  <label>Customer Name</label>
-                  <input type="text" class="form-control" placeholder="Enter ...">
-                </div>
-                <div class="form-group">
-                  <label>Layanan</label>
-                  <input type="text" class="form-control" placeholder="Enter ...">
-                </div>
-                <div class="form-group">
-                  <label>Witel</label>
-                  <input type="text" class="form-control" placeholder="Enter ...">
-                </div>
-                
-                <!-- textarea -->
-                <div class="form-group">
-                  <label>Lokasi</label>
-                  <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
-                </div>
-                <div class="form-group">
-                  <label>Koordinat</label>
-                  <input type="text" class="form-control" placeholder="Enter ...">
-                </div>
-                <div class="form-group">
-                  <label>IP</label>
-                  <input type="text" class="form-control" placeholder="Enter ...">
-                </div>
-                <div class="form-group">
-                  <label>Status</label>
-                  <input type="text" class="form-control" placeholder="Enter ...">
-                </div>
-                
-              </form>
-            </div>
-            <!-- /.box-body -->
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <!-- /.box-body -->
         </div>
       </div>
+      
     </div>
   </div>
+</div>
 </html>
