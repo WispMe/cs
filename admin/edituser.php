@@ -2,8 +2,12 @@
 require_once("../Config/auth.php");
 require_once("../Config/privilegeadmin.php");
 include("../Config/koneksi.php");
+$id = $_GET['id'];
+$sql = "SELECT * FROM login WHERE id = $id";
+$query = mysqli_query($con, $sql);
+$member = mysqli_fetch_assoc($query);
 if($_SESSION["nms"]["privilege"] = 1){
-  $pri = "Admin";
+$pri = "Admin";
 }
 ?>
 <!DOCTYPE html>
@@ -66,14 +70,16 @@ if($_SESSION["nms"]["privilege"] = 1){
             <ul class="nav navbar-nav">
               <!-- Messages: style can be found in dropdown.less-->
               <!-- User Account: style can be found in dropdown.less -->
-              <li class="dropdown user-menu">
+              <li class="dropdown user user-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  
                   <span class="hidden-xs"><?php echo $_SESSION["nms"]["username"] ?></span>
                 </a>
                 <ul class="dropdown-menu">
                   <!-- User image -->
                   <li class="user-header">
-                    <p><?php echo $_SESSION["nms"]["firstname"] ?> 
+                    
+                    <p><?php echo $_SESSION["nms"]["firstname"] ?>
                       <?php echo $_SESSION["nms"]["lastname"] ?>
                       <small><?php echo $pri ?></small>
                     </p>
@@ -81,6 +87,7 @@ if($_SESSION["nms"]["privilege"] = 1){
                   
                   <!-- Menu Footer-->
                   <li class="user-footer">
+                    
                     <div class="pull-right">
                       <a href="../config/logout.php" class="btn btn-default btn-flat">Sign out</a>
                     </div>
@@ -111,20 +118,19 @@ if($_SESSION["nms"]["privilege"] = 1){
               
             </li>
             <li class="">
-              <a href="circuitdata.php">
+              <a href="#">
                 <i class="fa fa-database"></i> <span>Circuit Data</span>
                 
               </a>
               
             </li>
             <li class="active">
-              <a href="#">
+              <a href="userdata.php">
                 <i class="fa fa-user-o"></i> <span>User Data</span>
                 
               </a>
               
             </li>
-
             
             
           </ul>
@@ -142,74 +148,89 @@ if($_SESSION["nms"]["privilege"] = 1){
           <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-folder"></i> Home</a></li>
             <li class="active">User Data</li>
-            
           </ol>
         </section>
         <!-- Main content -->
         <section class="content">
-          <!-- Small boxes (Stat box) -->
-          <div class="row col-md-12">
-            <div class="box">
-              
-              
-              <div class="box-header">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-plus" ></i> Add User</button>
-                
-              </div>
-              <!-- /.box-header -->
-              <div class="box-body">
-                <table id="example1" class="table table-bordered table-striped">
-                  <thead>
-                    <tr>
-                      <th>No</th>
-                      <th>First Name</th>
-                      <th>Last Name</th>
-                      <th>Username</th>
-                      <th>Telephone Number</th>
-                      <th>Privilege</th>
-                      <th>Access Grup</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <?php
-                    $sql_data = "SELECT * FROM login";
-                    $query_data = mysqli_query($con, $sql_data);
-                    $no = 1;
-                    while($data = mysqli_fetch_object($query_data)) {
-                    ?>
-                    <tr>
-                      <td><?php echo $no++ ?></td>
-                      <td><?php echo $data->firstname ?></td>
-                      <td><?php echo $data->lastname ?></td>
-                      <td><?php echo $data->username ?></td>
-                      <td><?php echo $data->telephone ?></td>
-                      <td><?php
-                        if($data->privilege==0){
-                        echo "User";
-                        }
-                        else{
-                        echo "Admin";
-                        }
-                      ?></td>
-                      <td><?php echo $data->grup ?></td>
-                       <td class="text-center d-flex justify-content-around">
-                        <a href="edituser.php?id=<?php echo $data->id ?>"
-                        class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
-                        <a href="hapususer.php?id=<?php echo $data->id ?>"
-                        class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')"><i class="fa fa-trash-o"></i></a>
-                      </td>
-
-                    </tr>
-                    <?php } ?>
-                    
-                  </tbody>
-                </table>
-              </div>
-              <!-- /.box-body -->
+          <!-- general form elements disabled -->
+          <div class="box box-warning">
+            <div class="box-header with-border">
+              <h3 class="box-title"><a href="userdata.php"> <button type="button" class="btn btn-block btn-danger" ><i class="fa fa-mail-reply"></i> Back</button></a></h3>
             </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <form role="form" method="post" action="proses-edit_user.php">
+                <!-- text input -->
+                <input type="hidden" name="id" value="<?php echo $member['id'] ?>" />
+                <div class="form-row">
+                  <div class="col-md-6">
+                    <div class="form-group"><label for="firstname"><strong>First Name</strong></label><input class="form-control" type="text" name="firstname" value="<?php echo $member['firstname'] ?>"></div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group"><label for="lastname"><strong>Last Name</strong></label><input class="form-control" type="text"  name="lastname" value="<?php echo $member['lastname'] ?>">
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-md-12">
+                <label>Username</label>
+                <input type="text" class="form-control" placeholder="Username" name="username" value="<?php echo $member['username'] ?>" required>
+              </div>
+              <div class="form-group col-md-12">
+                <label>Telephone Number</label>
+                <input type="text" class="form-control" placeholder="Telephone Number" name="telephone" value="<?php echo $member['telephone'] ?>" required>
+              </div>
+              <div class="form-group col-md-12">
+                <label>Privilege</label>
+                <select class="form-control" name="privilege" selected="<?php echo $member['privilege'] ?>" onchange="if (this.selectedIndex== 0){
+                  document.getElementById('grup').style.visibility='hidden'}else{
+                  document.getElementById('grup').style.visibility='visible'}">
+                  <?php
+                  if($member['privilege']==0){
+                  echo '<option value="1" >Admin</option>
+                  <option value="0" selected="selected">User</option>';
+                  }
+                  else{
+                  echo '<option value="1" selected="selected">Admin</option>
+                  <option value="0" >User</option>';
+                  }
+                  ?>
+                </select>
+              </div>
+              <div class="form-group col-md-12">
+                <?php if($member['privilege']==0){
+                echo '<div id="grup" style="visibility:visible;">';
+                  }
+                  else{
+                  echo '<div id="grup" style="visibility:hidden;">';
+                    }
+                    ?>
+                    <label name="grup">Access Grup</label>
+                    <select class="form-control" name="grup">
+                      <?php
+                      $sql_grup = "SELECT grup FROM ip GROUP BY grup";
+                      $query_grup = mysqli_query($con, $sql_grup);
+                      while($result_grup = mysqli_fetch_object($query_grup)){
+                      if($member['grup'] == $result_grup->grup)
+                      {
+                        echo '<option value="'.$result_grup->grup.'" selected="selected" >'.$result_grup->grup.'</option>';
+                      }
+                      else{
+                        echo '<option value="'.$result_grup->grup.'"  >'.$result_grup->grup.'</option>';
+                      }
+                      } ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="submit" name="submit" class="btn btn-primary">Update</button>
+                </div>
+                
+                
+                
+              </form>
+            </div>
+            <!-- /.box-body -->
           </div>
-          <!-- /.row -->
         </section>
         <!-- /.content -->
       </div>
@@ -223,6 +244,7 @@ if($_SESSION["nms"]["privilege"] = 1){
       </footer>
       <!-- Control Sidebar -->
       <aside class="control-sidebar control-sidebar-dark" style="display: none;">
+        <!-- Create the tabs -->
         
         <!-- Tab panes -->
         <div class="tab-content">
@@ -443,83 +465,4 @@ if($_SESSION["nms"]["privilege"] = 1){
     })
     </script>
   </body>
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Add User</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <!-- general form elements disabled -->
-          <div class="box box-warning">
-            
-            <!-- /.box-header -->
-            <div class="box-body">
-              <form role="form" action="add_user.php" method="post">
-                <!-- text input -->
-                
-                <div class="form-row">
-                  <div class="col-md-6">
-                    <div class="form-group"><label for="firstname"><strong>First Name</strong></label><input class="form-control" type="text" name="firstname"></div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group"><label for="lastname"><strong>Last Name</strong></label><input class="form-control" type="text"  name="lastname">
-                  </div>
-                </div>
-              </div>
-              
-              
-              <div class="form-group col-md-12">
-                <label>Username</label>
-                <input type="text" class="form-control" placeholder="Username" name="username" required>
-              </div>
-              <div class="form-group col-md-12">
-                <label>Password</label>
-                <input type="password" class="form-control" placeholder="Password" name="password" required>
-              </div>
-              <div class="form-group col-md-12">
-                <label>Telephone Number</label>
-                <input type="text" class="form-control" placeholder="Telephone Number" name="telephone" required>
-              </div>
-              <div class="form-group col-md-12">
-                <label>Privilege</label>
-                <select class="form-control" name="privilege" onchange="if (this.selectedIndex== 0){
-                  document.getElementById('grup').style.visibility='hidden'}else{
-                  document.getElementById('grup').style.visibility='visible'}">
-                  <option value="1" >Admin</option>
-                  <option value="0" >User</option>
-                </select>
-              </div>
-              <div class="form-group col-md-12">
-                <div id="grup" style="visibility:hidden;">
-                  <label name="grup">Access Grup</label>
-                  <select class="form-control" name="grup">
-                    <?php
-                    $sql_grup = "SELECT grup FROM ip GROUP BY grup";
-                    $query_grup = mysqli_query($con, $sql_grup);
-                    while($result_grup = mysqli_fetch_object($query_grup)){
-                    ?>
-                    <option value="<?php echo $result_grup->grup ?>" ><?php echo $result_grup->grup ?></option>
-                  <?php } ?>
-                  </select>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" name="submit" class="btn btn-primary">Submit</button>
-              </div>
-              
-            </form>
-          </div>
-          <!-- /.box-body -->
-        </div>
-      </div>
-      
-    </div>
-  </div>
-</div>
 </html>

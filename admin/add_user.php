@@ -11,8 +11,8 @@ if(isset($_POST['submit'])){
     $password = password_hash($_POST["password"], PASSWORD_DEFAULT);
     //$email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
     $privilege = filter_input(INPUT_POST, 'privilege', FILTER_SANITIZE_STRING);
-    if($privilege = 1){
-        $grup = "NULL";
+    if($privilege == 1){
+        $grup = "-";
     }
     else{
          $grup = filter_input(INPUT_POST, 'grup', FILTER_SANITIZE_STRING);
