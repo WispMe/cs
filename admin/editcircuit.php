@@ -147,7 +147,9 @@ if($_SESSION["nms"]["privilege"] = 1){
           </h1>
           <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-folder"></i> Home</a></li>
-            <li class="active">Circuit Data Grup</li>
+            <li class="active">Circuit Data</li>
+            <li class="active">Data</li>
+            <li class="active">Edit</li>
           </ol>
         </section>
         <!-- Main content -->

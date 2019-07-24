@@ -192,8 +192,15 @@ if($_SESSION["nms"]["privilege"] = 1){
                     $sql_data = "SELECT * FROM ip WHERE grup = '$grup'";
                     $query_data = mysqli_query($con, $sql_data);
                     while($data = mysqli_fetch_object($query_data)) {
-                    ?>
-                    <tr>
+                    ?> <?php
+                      if($data->status==0){
+                      echo "<tr style='color:red'>";
+                      }
+                      else{
+                      echo "<tr style='color:green'>";
+                      }
+                      ?>
+                    
                       <td><?php echo $data->sid ?></td>
                       <td><?php echo $data->customer ?></td>
                       <td><?php echo $data->layanan ?></td>

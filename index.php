@@ -20,7 +20,7 @@ if(isset($_SESSION['nms'])&&!empty($_SESSION['nms'])){
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>AdminLTE 2 | Log in</title>
+  <title>NetworkMS</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
@@ -51,7 +51,7 @@ if(isset($_SESSION['nms'])&&!empty($_SESSION['nms'])){
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
-    <p class="login-box-msg">Sign in to start your session</p>
+    <p class="login-box-msg">Sign In</p>
 
     <form method="post" action="config/login.php">
       <div class="form-group has-feedback">
@@ -65,9 +65,9 @@ if(isset($_SESSION['nms'])&&!empty($_SESSION['nms'])){
       <div class="row">
         <div class="col-xs-8">
           <div class="checkbox icheck">
-            <label>
+            <!--label>
               <input type="checkbox"> Remember Me
-            </label>
+            </label-->
           </div>
         </div>
         <!-- /.col -->

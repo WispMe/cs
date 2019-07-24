@@ -1,6 +1,8 @@
 <?php
 include("../Config/koneksi.php");
-$sql_data1 = "SELECT * FROM ip WHERE status = 1";
+require_once("../Config/auth.php");
+$grup = $_SESSION["nms"]["grup"];
+$sql_data1 = "SELECT * FROM ip WHERE status = 1 AND grup='".$grup."'";
 $query_data1 = mysqli_query($con, $sql_data1);
 ?>
 <table id="example3" class="table table-bordered table-striped">

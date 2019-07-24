@@ -3,6 +3,8 @@ require_once("../Config/auth.php");
 require '../Config/koneksi.php';
 require_once("../Config/privilegeuser.php");
 
+$grup = $_SESSION["nms"]["grup"];
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -19,7 +21,7 @@ require_once("../Config/privilegeuser.php");
     <!-- Ionicons -->
     <link rel="stylesheet" href="../assets/bower_components/Ionicons/css/ionicons.min.css">
     <!-- Theme style -->
-    <link rel="stylesheet" href="../assets/dist/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="../assets/dist/css/AdminLTE.css">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
     folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="../assets/dist/css/skins/_all-skins.min.css">
@@ -121,7 +123,7 @@ require_once("../Config/privilegeuser.php");
         <section class="content-header">
           <h1>
           Dashboard
-          <small></small>
+          <small><?php echo $_SESSION["nms"]["grup"]  ?></small>
           </h1>
           <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-folder"></i> Home</a></li>
@@ -133,39 +135,17 @@ require_once("../Config/privilegeuser.php");
           <!-- Small boxes (Stat box) -->
           <div class="row">
             <div class="col-lg-3 col-xs-6">
-              <!-- small box -->
-              <div class="info-box">
-                <span class="info-box-icon bg-aqua"><i class="fa fa-hdd-o"></i></span>
-                <div class="info-box-content">
-                  <?php
-                  //Ambil data total circuit
-                  $sql_totalcircuit = "SELECT COUNT(*) as total FROM ip";
-                  $query_totalcircuit = mysqli_query($con, $sql_totalcircuit);
-                  $totalcircuit = mysqli_fetch_object($query_totalcircuit);
-                  ?>
-                  <span class="info-box-text">Total Circuit</span>
-                  <span class="info-box-number"><?php echo $totalcircuit->total; ?></span>
-                </div>
-                <!-- /.info-box-content -->
-              </div>
+             <div id="totalcircuit">
+               
+             </div>
               <!-- /.info-box -->
             </div>
             <div class="col-lg-3 col-xs-6">
               <!-- small box -->
-              <div class="info-box">
-                <span class="info-box-icon bg-red"><i class="fa  fa-power-off"></i></span>
-                <div class="info-box-content">
-                  <?php
-                  //Ambil data total circuit
-                  $sql_circuitdis= "SELECT COUNT(*) as total FROM ip WHERE status=0";
-                  $query_circuitdis = mysqli_query($con, $sql_circuitdis);
-                  $circuitdis = mysqli_fetch_object($query_circuitdis);
-                  ?>
-                  <span class="info-box-text">Disconnected</span>
-                  <span class="info-box-number"><?php echo $circuitdis->total; ?></span>
-                </div>
-                <!-- /.info-box-content -->
-              </div>
+              <div id="totalcircuit1">
+               
+             </div>
+             
               <!-- /.info-box -->
             </div>
           </div>
@@ -177,6 +157,7 @@ require_once("../Config/privilegeuser.php");
               <div class="box box-default collapsed-box">
                 <div class="box-header with-border">
                   <h3 class="box-title">Circuit Disconnected</h3>
+                  <a class="btn btn-info btn-sm" style="margin-left: 5px;" onclick="loadData1()"><i class="fa fa-refresh"></i></a>
                   <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
                     </button>
@@ -188,50 +169,9 @@ require_once("../Config/privilegeuser.php");
                   <div class="box">
                     <!-- /.box-header -->
                     <div class="box-body">
-                      <?php
-                      $sql_data = "SELECT * FROM ip INNER JOIN login WHERE status=0 AND login.grup=ip.grup";
-                      $query_data = mysqli_query($con, $sql_data);
-                      ?>
-                      <table id="example1" class="table table-bordered table-striped">
-                        <thead>
-                          <tr>
-                            <th>GRUP</th>
-                            <th>SID</th>
-                            <th>Customer Name</th>
-                            <th>Layanan</th>
-                            <th>Witel</th>
-                            <th>Lokasi</th>
-                            <th>Koordinat</th>
-                            <th>IP</th>
-                            <th>Status</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <?php
-                          while($data = mysqli_fetch_object($query_data)) {
-                          ?>
-                          <tr>
-                            <td><?php echo $data->grup ?></td>
-                            <td><?php echo $data->sid ?></td>
-                            <td><?php echo $data->customer ?></td>
-                            <td><?php echo $data->layanan ?></td>
-                            <td><?php echo $data->witel ?></td>
-                            <td><?php echo $data->lokasi ?></td>
-                            <td><?php echo $data->koordinat ?></td>
-                            <td><?php echo $data->ip ?></td>
-                            <?php
-                            if($data->status==0){
-                            echo "<td style='color:red'>Disconnected</td>";
-                            }
-                            else{
-                            echo "<td style='color:green'>Connected</td>";
-                            }
-                            ?>
-                          </tr>
-                          <?php } ?>
-                          
-                        </tbody>
-                      </table>
+                         <div id="content1">
+                        
+                      </div>
                     </div>
                     <!-- /.box-body -->
                   </div>
@@ -248,6 +188,7 @@ require_once("../Config/privilegeuser.php");
               <div class="box box-default collapsed-box">
                 <div class="box-header with-border">
                   <h3 class="box-title">Circuit Connected</h3>
+                  <a class="btn btn-info btn-sm" style="margin-left: 5px;" onclick="loadData()"><i class="fa fa-refresh"></i></a>
                   <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
                     </button>
@@ -259,50 +200,9 @@ require_once("../Config/privilegeuser.php");
                   <div class="box">
                     <!-- /.box-header -->
                     <div class="box-body">
-                      <?php
-                      $sql_data1 = "SELECT * FROM ip INNER JOIN login WHERE status=1 AND login.grup=ip.grup";
-                      $query_data1 = mysqli_query($con, $sql_data1);
-                      ?>
-                      <table id="example3" class="table table-bordered table-striped">
-                        <thead>
-                          <tr>
-                            <th>GRUP</th>
-                            <th>SID</th>
-                            <th>Customer Name</th>
-                            <th>Layanan</th>
-                            <th>Witel</th>
-                            <th>Lokasi</th>
-                            <th>Koordinat</th>
-                            <th>IP</th>
-                            <th>Status</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <?php
-                          while($data1 = mysqli_fetch_object($query_data1)) {
-                          ?>
-                          <tr>
-                            <td><?php echo $data->grup ?></td>
-                            <td><?php echo $data1->sid ?></td>
-                            <td><?php echo $data1->customer ?></td>
-                            <td><?php echo $data1->layanan ?></td>
-                            <td><?php echo $data1->witel ?></td>
-                            <td><?php echo $data1->lokasi ?></td>
-                            <td><?php echo $data1->koordinat ?></td>
-                            <td><?php echo $data1->ip ?></td>
-                            <?php
-                            if($data1->status==0){
-                            echo "<td style='color:red'>Disconnected</td>";
-                            }
-                            else{
-                            echo "<td style='color:green'>Connected</td>";
-                            }
-                            ?>
-                          </tr>
-                          <?php } ?>
-                          
-                        </tbody>
-                      </table>
+                      <div id="content">
+                        
+                      </div>
                     </div>
                     <!-- /.box-body -->
                   </div>
@@ -536,18 +436,46 @@ require_once("../Config/privilegeuser.php");
     <script src="../assets/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
     <script src="../assets/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
     <!-- page script -->
-    <script>
-    $(function () {
-    $('#example1').DataTable()
-    $('#example2').DataTable({
-    'paging'      : true,
-    'lengthChange': false,
-    'searching'   : false,
-    'ordering'    : true,
-    'info'        : true,
-    'autoWidth'   : false
+    <script type="text/javascript">
+    $(document).ready(function(){
+    loadData();
     })
+    function loadData(){
+    $.get('connectedtable.php', function(data){
+    $('#content').html(data)})
+    //setTimeout(loadData, 10000)
+    };
+    </script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+    loadData1();
     })
+    function loadData1(){
+    $.get('disconnectedtable.php', function(data){
+    $('#content1').html(data)})
+    //setTimeout(loadData, 10000)
+    };
+    </script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+    total();
+    })
+    function total(){
+    $.get('totallive.php', function(data){
+    $('#totalcircuit').html(data)})
+    setTimeout(total, 1000)
+    };
+    </script>
+
+    <script type="text/javascript">
+    $(document).ready(function(){
+    total1();
+    })
+    function total1(){
+    $.get('totallive1.php', function(data){
+    $('#totalcircuit1').html(data)})
+    setTimeout(total1, 1000)
+    };
     </script>
   </body>
 </html>
