@@ -2,10 +2,7 @@
 require_once("../Config/auth.php");
 require '../Config/koneksi.php';
 require_once("../Config/privilegeadmin.php");
-
-if($_SESSION["nms"]["privilege"] = 1){
-  $pri = "Admin";
-}
+$grup = $_SESSION["nms"]["grup"];
 ?>
 <!DOCTYPE html>
 <html>
@@ -15,6 +12,7 @@ if($_SESSION["nms"]["privilege"] = 1){
     <title>NetworkMS</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="icon" href="../assets/pic/1ico.png">
     <!-- Bootstrap 3.3.7 -->
     <link rel="stylesheet" href="../assets/bower_components/bootstrap/dist/css/bootstrap.min.css">
     <!-- Font Awesome -->
@@ -47,11 +45,11 @@ if($_SESSION["nms"]["privilege"] = 1){
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
   </head>
-  <body class="hold-transition skin-blue sidebar-mini">
+  <body  class="hold-transition skin-blue sidebar-collapse sidebar-mini">
     <div class="wrapper">
       <header class="main-header">
         <!-- Logo -->
-        <a href="index2.html" class="logo">
+        <a href="dashboard.php" class="logo">
           <!-- mini logo for sidebar mini 50x50 pixels -->
           <span class="logo-mini"><b>N</b>MS</span>
           <!-- logo for regular state and mobile devices -->
@@ -75,10 +73,9 @@ if($_SESSION["nms"]["privilege"] = 1){
                 <ul class="dropdown-menu">
                   <!-- User image -->
                   <li class="user-header">
-                    
-                    <p><?php echo $_SESSION["nms"]["firstname"] ?> 
+                    <p><?php echo $_SESSION["nms"]["firstname"] ?>
                       <?php echo $_SESSION["nms"]["lastname"] ?>
-                      <small><?php echo $pri ?></small>
+                      <small>User</small>
                     </p>
                   </li>
                   
@@ -100,7 +97,7 @@ if($_SESSION["nms"]["privilege"] = 1){
         </nav>
       </header>
       <!-- Left side column. contains the logo and sidebar -->
-      <aside class="main-sidebar">
+       <aside class="main-sidebar">
         <!-- sidebar: style can be found in sidebar.less -->
         <section class="sidebar">
           
@@ -128,7 +125,7 @@ if($_SESSION["nms"]["privilege"] = 1){
               </a>
               
             </li>
-    
+            
           </ul>
         </section>
         <!-- /.sidebar -->
@@ -138,8 +135,8 @@ if($_SESSION["nms"]["privilege"] = 1){
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>
-          Live Dashboard
-          <small></small>
+          Dashboard
+          <small><?php echo $_SESSION["nms"]["grup"]  ?></small>
           </h1>
           <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-folder"></i> Home</a></li>
@@ -160,6 +157,14 @@ if($_SESSION["nms"]["privilege"] = 1){
             </div>
             <div class="col-lg-3 col-xs-6">
               <!-- small box -->
+              <div id="totalcircuit2">
+                
+              </div>
+              
+              <!-- /.info-box -->
+            </div>
+            <div class="col-lg-3 col-xs-6">
+              <!-- small box -->
               <div id="totalcircuit1">
                 
               </div>
@@ -172,10 +177,10 @@ if($_SESSION["nms"]["privilege"] = 1){
           <div class="row">
             <!-- Left col -->
             <div class="col-md-12">
-              <div class="box box-default collapsed-box">
+              <div class="box box-default">
                 <div class="box-header with-border">
-                  <h3 class="box-title">Circuit Disconnected</h3>
-                  <a class="btn btn-info btn-sm" style="margin-left: 5px;" onclick="loadData1()"><i class="fa fa-refresh"></i></a>
+                  <h3 class="box-title">List</h3>
+                  
                   <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
                     </button>
@@ -200,37 +205,6 @@ if($_SESSION["nms"]["privilege"] = 1){
             </div>
           </div>
           <!-- /.row (main row) -->
-          <div class="row">
-            <!-- Left col -->
-            <div class="col-md-12">
-              <div class="box box-default collapsed-box">
-                <div class="box-header with-border">
-                  <h3 class="box-title">Circuit Connected</h3>
-                  <a class="btn btn-info btn-sm" style="margin-left: 5px;" onclick="loadData()"><i class="fa fa-refresh"></i></a>
-                  <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
-                    </button>
-                  </div>
-                  <!-- /.box-tools -->
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                  <div class="box">
-                    <!-- /.box-header -->
-                    <div class="box-body">
-                      <div id="content">
-                        
-                      </div>
-                    </div>
-                    <!-- /.box-body -->
-                  </div>
-                  
-                  <!-- /.Left col -->
-                </div>
-              </div>
-              
-            </div>
-          </div>
         </section>
         <!-- /.content -->
       </div>
@@ -245,7 +219,10 @@ if($_SESSION["nms"]["privilege"] = 1){
       <!-- Control Sidebar -->
       <aside class="control-sidebar control-sidebar-dark" style="display: none;">
         <!-- Create the tabs -->
-        
+        <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+          <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
+          <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
+        </ul>
         <!-- Tab panes -->
         <div class="tab-content">
           <!-- Home tab content -->
@@ -451,8 +428,6 @@ if($_SESSION["nms"]["privilege"] = 1){
     <script src="../assets/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
     <script src="../assets/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
     <!-- page script -->
-    
-    
     <script type="text/javascript">
     $(document).ready(function(){
     loadData();
@@ -473,7 +448,6 @@ if($_SESSION["nms"]["privilege"] = 1){
     //setTimeout(loadData, 10000)
     };
     </script>
-    
     <script type="text/javascript">
     $(document).ready(function(){
     total();
@@ -484,7 +458,16 @@ if($_SESSION["nms"]["privilege"] = 1){
     setTimeout(total, 1000)
     };
     </script>
-
+    <script type="text/javascript">
+    $(document).ready(function(){
+    total2();
+    })
+    function total2(){
+    $.get('totallive2.php', function(data){
+    $('#totalcircuit2').html(data)})
+    setTimeout(total2, 1000)
+    };
+    </script>
     <script type="text/javascript">
     $(document).ready(function(){
     total1();
@@ -495,6 +478,5 @@ if($_SESSION["nms"]["privilege"] = 1){
     setTimeout(total1, 1000)
     };
     </script>
-
   </body>
 </html>

@@ -20,14 +20,6 @@ return $macAddr;
 $page = $_SERVER['PHP_SELF'];
 $sec = "15";
 
-
-//echo "Running...\n";
-//x=1;
-//while(true){
-//echo "Stage ";
-//echo $x;
-//echo "\n";
-
 $sql = "SELECT * FROM ip";
 $query = mysqli_query($con, $sql);
 while($isi = mysqli_fetch_object($query)) {
@@ -43,10 +35,6 @@ $query3 = mysqli_query($con, $sql3);
 }
 }
 
-//sleep(5);
-//$x++;
-//}
-//echo "\n\n\ndone";
 ?>
 <html>
 	<head>

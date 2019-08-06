@@ -2,9 +2,7 @@
 require_once("../Config/auth.php");
 require '../Config/koneksi.php';
 require_once("../Config/privilegeuser.php");
-
 $grup = $_SESSION["nms"]["grup"];
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -14,6 +12,7 @@ $grup = $_SESSION["nms"]["grup"];
     <title>NetworkMS</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="icon" href="../assets/pic/1ico.png">
     <!-- Bootstrap 3.3.7 -->
     <link rel="stylesheet" href="../assets/bower_components/bootstrap/dist/css/bootstrap.min.css">
     <!-- Font Awesome -->
@@ -46,11 +45,11 @@ $grup = $_SESSION["nms"]["grup"];
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
   </head>
-  <body class="hold-transition skin-blue sidebar-mini">
+  <body  class="hold-transition skin-blue sidebar-collapse sidebar-mini">
     <div class="wrapper">
       <header class="main-header">
         <!-- Logo -->
-        <a href="index2.html" class="logo">
+        <a href="dashboard.php" class="logo">
           <!-- mini logo for sidebar mini 50x50 pixels -->
           <span class="logo-mini"><b>N</b>MS</span>
           <!-- logo for regular state and mobile devices -->
@@ -73,8 +72,8 @@ $grup = $_SESSION["nms"]["grup"];
                 </a>
                 <ul class="dropdown-menu">
                   <!-- User image -->
-                   <li class="user-header">
-                    <p><?php echo $_SESSION["nms"]["firstname"] ?> 
+                  <li class="user-header">
+                    <p><?php echo $_SESSION["nms"]["firstname"] ?>
                       <?php echo $_SESSION["nms"]["lastname"] ?>
                       <small>User</small>
                     </p>
@@ -135,17 +134,27 @@ $grup = $_SESSION["nms"]["grup"];
           <!-- Small boxes (Stat box) -->
           <div class="row">
             <div class="col-lg-3 col-xs-6">
-             <div id="totalcircuit">
-               
-             </div>
+              <!-- small box -->
+              <div id="totalcircuit">
+                
+              </div>
+              
+              <!-- /.info-box -->
+            </div>
+            <div class="col-lg-3 col-xs-6">
+              <!-- small box -->
+              <div id="totalcircuit2">
+                
+              </div>
+              
               <!-- /.info-box -->
             </div>
             <div class="col-lg-3 col-xs-6">
               <!-- small box -->
               <div id="totalcircuit1">
-               
-             </div>
-             
+                
+              </div>
+              
               <!-- /.info-box -->
             </div>
           </div>
@@ -154,10 +163,10 @@ $grup = $_SESSION["nms"]["grup"];
           <div class="row">
             <!-- Left col -->
             <div class="col-md-12">
-              <div class="box box-default collapsed-box">
+              <div class="box box-default">
                 <div class="box-header with-border">
-                  <h3 class="box-title">Circuit Disconnected</h3>
-                  <a class="btn btn-info btn-sm" style="margin-left: 5px;" onclick="loadData1()"><i class="fa fa-refresh"></i></a>
+                  <h3 class="box-title">List</h3>
+                  
                   <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
                     </button>
@@ -169,7 +178,7 @@ $grup = $_SESSION["nms"]["grup"];
                   <div class="box">
                     <!-- /.box-header -->
                     <div class="box-body">
-                         <div id="content1">
+                      <div id="content1">
                         
                       </div>
                     </div>
@@ -182,37 +191,6 @@ $grup = $_SESSION["nms"]["grup"];
             </div>
           </div>
           <!-- /.row (main row) -->
-          <div class="row">
-            <!-- Left col -->
-            <div class="col-md-12">
-              <div class="box box-default collapsed-box">
-                <div class="box-header with-border">
-                  <h3 class="box-title">Circuit Connected</h3>
-                  <a class="btn btn-info btn-sm" style="margin-left: 5px;" onclick="loadData()"><i class="fa fa-refresh"></i></a>
-                  <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
-                    </button>
-                  </div>
-                  <!-- /.box-tools -->
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                  <div class="box">
-                    <!-- /.box-header -->
-                    <div class="box-body">
-                      <div id="content">
-                        
-                      </div>
-                    </div>
-                    <!-- /.box-body -->
-                  </div>
-                  
-                  <!-- /.Left col -->
-                </div>
-              </div>
-              
-            </div>
-          </div>
         </section>
         <!-- /.content -->
       </div>
@@ -466,7 +444,16 @@ $grup = $_SESSION["nms"]["grup"];
     setTimeout(total, 1000)
     };
     </script>
-
+    <script type="text/javascript">
+    $(document).ready(function(){
+    total2();
+    })
+    function total2(){
+    $.get('totallive2.php', function(data){
+    $('#totalcircuit2').html(data)})
+    setTimeout(total2, 1000)
+    };
+    </script>
     <script type="text/javascript">
     $(document).ready(function(){
     total1();

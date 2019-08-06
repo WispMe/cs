@@ -2,7 +2,7 @@
 include("../Config/koneksi.php");
 require_once("../Config/auth.php");
 $grup = $_SESSION["nms"]["grup"];
-$sql_data = "SELECT * FROM ip WHERE status = 0 AND grup='".$grup."'";
+$sql_data = "SELECT * FROM ip WHERE grup='".$grup."'";
 $query_data = mysqli_query($con, $sql_data);
 ?>
 <table id="example1" class="table table-bordered table-striped">

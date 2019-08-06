@@ -28,7 +28,7 @@ if(isset($_POST['submit'])){
 	// apakah query update berhasil?
 	if( $query ) {
 		// kalau berhasil alihkan ke halaman list-siswa.php
-		header('Location: userdata.php');
+		header('Location: userdata.php?success=3');
 	} else {
 		// kalau gagal tampilkan pesan
 		die("Gagal menyimpan perubahan...");

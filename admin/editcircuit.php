@@ -18,6 +18,7 @@ if($_SESSION["nms"]["privilege"] = 1){
     <title>NetworkMS</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="icon" href="../assets/pic/1ico.png">
     <!-- Bootstrap 3.3.7 -->
     <link rel="stylesheet" href="../assets/bower_components/bootstrap/dist/css/bootstrap.min.css">
     <!-- Font Awesome -->
@@ -50,11 +51,11 @@ if($_SESSION["nms"]["privilege"] = 1){
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
   </head>
-  <body class="hold-transition skin-blue sidebar-mini">
+  <body  class="hold-transition skin-blue fixed sidebar-mini">
     <div class="wrapper">
       <header class="main-header">
         <!-- Logo -->
-        <a href="index2.html" class="logo">
+        <a href="dashboard.php" class="logo">
           <!-- mini logo for sidebar mini 50x50 pixels -->
           <span class="logo-mini"><b>N</b>MS</span>
           <!-- logo for regular state and mobile devices -->

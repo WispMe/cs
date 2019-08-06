@@ -14,7 +14,7 @@ $query = mysqli_query($con, $sql);
 if( $query ) {
 // kalau berhasil alihkan ke halaman list-siswa.php
 
-header("Location:circuitdatagrup.php?grup=".$isi->grup."");
+header("Location:circuitdatagrup.php?grup=".$isi->grup."&success=1");
 } else {
 // kalau gagal tampilkan pesan
 die("Gagal menyimpan perubahan...");

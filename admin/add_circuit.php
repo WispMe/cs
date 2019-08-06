@@ -35,7 +35,7 @@ if(isset($_POST['submit'])){
 
     // jika query simpan berhasil, maka user sudah terdaftar
     // maka alihkan ke halaman registersukses
-    if($saved) header("Location: circuitdata.php");
+    if($saved) header("Location: circuitdata.php?success=berhasil");
     else die("Gagal");
 }
 

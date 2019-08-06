@@ -46,5 +46,5 @@ for ($i=2; $i<=$jumlah_baris; $i++){
 unlink($_FILES['filepegawai']['name']);
 
 // alihkan halaman ke index.php
-header("location:circuitdata.php");
+header("location:circuitdata.php?success=$berhasil");
 ?>

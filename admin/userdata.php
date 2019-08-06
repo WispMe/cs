@@ -3,7 +3,7 @@ require_once("../Config/auth.php");
 require_once("../Config/privilegeadmin.php");
 include("../Config/koneksi.php");
 if($_SESSION["nms"]["privilege"] = 1){
-  $pri = "Admin";
+$pri = "Admin";
 }
 ?>
 <!DOCTYPE html>
@@ -14,6 +14,7 @@ if($_SESSION["nms"]["privilege"] = 1){
     <title>NetworkMS</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="icon" href="../assets/pic/1ico.png">
     <!-- Bootstrap 3.3.7 -->
     <link rel="stylesheet" href="../assets/bower_components/bootstrap/dist/css/bootstrap.min.css">
     <!-- Font Awesome -->
@@ -46,11 +47,11 @@ if($_SESSION["nms"]["privilege"] = 1){
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
   </head>
-  <body class="hold-transition skin-blue sidebar-mini">
+  <body  class="hold-transition skin-blue fixed sidebar-mini">
     <div class="wrapper">
       <header class="main-header">
         <!-- Logo -->
-        <a href="index2.html" class="logo">
+        <a href="dashboard.php" class="logo">
           <!-- mini logo for sidebar mini 50x50 pixels -->
           <span class="logo-mini"><b>N</b>MS</span>
           <!-- logo for regular state and mobile devices -->
@@ -73,7 +74,7 @@ if($_SESSION["nms"]["privilege"] = 1){
                 <ul class="dropdown-menu">
                   <!-- User image -->
                   <li class="user-header">
-                    <p><?php echo $_SESSION["nms"]["firstname"] ?> 
+                    <p><?php echo $_SESSION["nms"]["firstname"] ?>
                       <?php echo $_SESSION["nms"]["lastname"] ?>
                       <small><?php echo $pri ?></small>
                     </p>
@@ -124,7 +125,6 @@ if($_SESSION["nms"]["privilege"] = 1){
               </a>
               
             </li>
-
             
             
           </ul>
@@ -133,6 +133,35 @@ if($_SESSION["nms"]["privilege"] = 1){
       </aside>
       <!-- Content Wrapper. Contains page content -->
       <div class="content-wrapper">
+        <?php
+        if(isset($_GET['success'])){
+        if($_GET['success']==1){
+        echo "
+        <div class='alert alert-success alert-dismissible'>
+          <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+          <h4><i class='icon fa fa-check'></i>Success!</h4>Add User
+        </div>
+        ";
+        }
+        elseif($_GET['success']==2){
+        echo "
+        <div class='alert alert-success alert-dismissible'>
+          <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+          <h4><i class='icon fa fa-check'></i>Success!</h4>Delete User
+        </div>
+        ";
+        }
+        elseif($_GET['success']==3){
+        echo "
+        <div class='alert alert-success alert-dismissible'>
+          <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+          <h4><i class='icon fa fa-check'></i>Success!</h4>Edit User
+        </div>
+        ";
+        }
+        }
+        ?>
+        
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>
@@ -146,11 +175,12 @@ if($_SESSION["nms"]["privilege"] = 1){
           </ol>
         </section>
         <!-- Main content -->
+        
+        
         <section class="content">
           <!-- Small boxes (Stat box) -->
           <div class="row col-md-12">
             <div class="box">
-              
               
               <div class="box-header">
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-plus" ></i> Add User</button>
@@ -193,13 +223,12 @@ if($_SESSION["nms"]["privilege"] = 1){
                         }
                       ?></td>
                       <td><?php echo $data->grup ?></td>
-                       <td class="text-center d-flex justify-content-around">
+                      <td class="text-center d-flex justify-content-around">
                         <a href="edituser.php?id=<?php echo $data->id ?>"
                         class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
                         <a href="hapususer.php?id=<?php echo $data->id ?>"
                         class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')"><i class="fa fa-trash-o"></i></a>
                       </td>
-
                     </tr>
                     <?php } ?>
                     
@@ -504,7 +533,7 @@ if($_SESSION["nms"]["privilege"] = 1){
                     while($result_grup = mysqli_fetch_object($query_grup)){
                     ?>
                     <option value="<?php echo $result_grup->grup ?>" ><?php echo $result_grup->grup ?></option>
-                  <?php } ?>
+                    <?php } ?>
                   </select>
                 </div>
               </div>

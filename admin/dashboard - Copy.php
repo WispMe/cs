@@ -1,18 +1,7 @@
 <?php
 require_once("../Config/auth.php");
+require '../Config/koneksi.php';
 require_once("../Config/privilegeadmin.php");
-include("../Config/koneksi.php");
-//ambil id dari query string
-$grup = $_GET['grup'];
-//menampilkan judul grup
-$sql_judul = "SELECT grup FROM ip WHERE grup='$grup'";
-$query_judul = mysqli_query($con, $sql_judul);
-$judul = mysqli_fetch_object($query_judul);
-//cek jika grup tersebut ada
-if($judul->grup != $grup){
-//jika tidak ada akan kembali ke ke halaman sebelumnya
-header("location: circuitdata.php");
-}
 if($_SESSION["nms"]["privilege"] = 1){
 $pri = "Admin";
 }
@@ -49,6 +38,8 @@ $pri = "Admin";
     <link rel="stylesheet" href="../assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
     <!-- DataTables -->
     <link rel="stylesheet" href="../assets/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+    
+    
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -58,7 +49,7 @@ $pri = "Admin";
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
   </head>
-  <body class="hold-transition skin-blue fixed sidebar-mini">
+  <body  class="hold-transition skin-blue fixed sidebar-mini">
     <div class="wrapper">
       <header class="main-header">
         <!-- Logo -->
@@ -97,7 +88,7 @@ $pri = "Admin";
                   <li class="user-footer">
                     
                     <div class="pull-right">
-                      <a href="../config/logout.php" class="btn btn-default btn-flat">Sign out</a>
+                      <a class="btn btn-default btn-flat" href="../config/logout.php">Sign out</a>
                     </div>
                   </li>
                 </ul>
@@ -118,14 +109,14 @@ $pri = "Admin";
           <!-- sidebar menu: : style can be found in sidebar.less -->
           <ul class="sidebar-menu" data-widget="tree">
             <li class="header">MAIN MENU</li>
-            <li class="">
-              <a href="dashboard.php">
+            <li class="active">
+              <a href="#">
                 <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                 
               </a>
               
             </li>
-            <li class="active">
+            <li class="">
               <a href="circuitdata.php">
                 <i class="fa fa-database"></i> <span>Circuit Data</span>
                 
@@ -140,117 +131,102 @@ $pri = "Admin";
               
             </li>
             
-            
           </ul>
         </section>
         <!-- /.sidebar -->
       </aside>
       <!-- Content Wrapper. Contains page content -->
       <div class="content-wrapper">
-        <?php
-        if(isset($_GET['success'])){
-        if($_GET['success']==0){
-        echo "
-        <div class='alert alert-success alert-dismissible'>
-          <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-          <h4><i class='icon fa fa-check'></i>Success!</h4>Edit SID
-        </div>
-        ";
-        }
-        else{
-        echo "
-        <div class='alert alert-success alert-dismissible'>
-          <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-          <h4><i class='icon fa fa-check'></i>Success!</h4>Delete SID
-        </div>
-        ";
-        }
-        }
-        ?>
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>
-          Circuit Data Grup
+          Live Dashboard
           <small></small>
           </h1>
           <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-folder"></i> Home</a></li>
-            <li class="active">Circuit Data Grup</li>
-            <li class="active">Data</li>
+            <li class="active">Dashboard</li>
           </ol>
         </section>
         <!-- Main content -->
         <section class="content">
           <!-- Small boxes (Stat box) -->
-          <div class="row col-md-12">
-            <div class="box">
-              <div class="box-header">
-                <h3 class="box-title"><?php
-                echo $judul->grup;
-                ?></h3>
+          <div class="row">
+            <div class="col-lg-3 col-xs-6">
+              <!-- small box -->
+              <div id="totalcircuit">
                 
               </div>
-              <!-- /.box-header -->
-              <div class="box-body">
-                <table id="example1" class="table table-bordered table-striped">
-                  <thead>
-                    <tr>
-                      <th>SID</th>
-                      <th>Customer Name</th>
-                      <th>Layanan</th>
-                      <th>Witel</th>
-                      <th>Lokasi</th>
-                      <th>Koordinat</th>
-                      <th>IP</th>
-                      <th>Status</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <?php
-                    $sql_data = "SELECT * FROM ip WHERE grup = '$grup'";
-                    $query_data = mysqli_query($con, $sql_data);
-                    while($data = mysqli_fetch_object($query_data)) {
-                    ?> <?php
-                    if($data->status==0){
-                    echo "<tr style='color:red'>";
-                      }
-                      else{
-                      echo "<tr style='color:green'>";
-                        }
-                        ?>
-                        
-                        <td><?php echo $data->sid ?></td>
-                        <td><?php echo $data->customer ?></td>
-                        <td><?php echo $data->layanan ?></td>
-                        <td><?php echo $data->witel ?></td>
-                        <td><?php echo $data->lokasi ?></td>
-                        <td><?php echo $data->koordinat ?></td>
-                        <td><?php echo $data->ip ?></td>
-                        <?php
-                        if($data->status==0){
-                        echo "<td style='color:red'>Disconnected</td>";
-                        }
-                        else{
-                        echo "<td style='color:green'>Connected</td>";
-                        }
-                        ?>
-                        <td class="text-center d-flex justify-content-around">
-                          <a href="editcircuit.php?id=<?php echo $data->id ?>"
-                          class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
-                          <a href="hapus.php?id=<?php echo $data->id ?>"
-                          class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')"><i class="fa fa-trash-o"></i></a>
-                        </td>
-                      </tr>
-                      <?php } ?>
-                      
-                    </tbody>
-                  </table>
+              
+              <!-- /.info-box -->
+            </div>
+            <div class="col-lg-3 col-xs-6">
+              <!-- small box -->
+              <div id="totalcircuit2">
+                
+              </div>
+              
+              <!-- /.info-box -->
+            </div>
+            <div class="col-lg-3 col-xs-6">
+              <!-- small box -->
+              <div id="totalcircuit1">
+                
+              </div>
+              
+              <!-- /.info-box -->
+            </div>
+          </div>
+
+        
+
+          <!-- /.row -->
+          <!-- Main row -->
+          <div class="row">
+            <!-- Left col -->
+            <div class="col-md-12">
+              <div class="box box-default">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Circuit Lists</h3>
+                  
+                  <div class="box-tools pull-right">
+                  </div>
+                  <!-- /.box-tools -->
                 </div>
-                <!-- /.box-body -->
+                <!-- /.box-header -->
+                <div class="box-body">
+                  <div class="box">
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                      <table class="table table-bordered table-striped" id="example">
+                        <thead>
+                          <tr>
+                            <th>Grup</th>
+                            <th>SID</th>
+                            <th>Customer Name</th>
+                            <th>Layanan</th>
+                            <th>Witel</th>
+                            <th>Lokasi</th>
+                            <th>Koordinat</th>
+                            <th>IP</th>
+                            <th>Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          
+                        </tbody>
+                      </table>
+                      
+                    </div>
+                    <!-- /.box-body -->
+                  </div>
+                  
+                  <!-- /.Left col -->
+                </div>
               </div>
             </div>
-            <!-- /.row -->
+            <!-- /.row (main row) -->
+            
           </section>
           <!-- /.content -->
         </div>
@@ -264,6 +240,8 @@ $pri = "Admin";
         </footer>
         <!-- Control Sidebar -->
         <aside class="control-sidebar control-sidebar-dark" style="display: none;">
+          <!-- Create the tabs -->
+          
           <!-- Tab panes -->
           <div class="tab-content">
             <!-- Home tab content -->
@@ -469,85 +447,99 @@ $pri = "Admin";
       <script src="../assets/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
       <script src="../assets/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
       <!-- page script -->
-      <script>
-      $(function () {
-      $('#example1').DataTable()
-      $('#example2').DataTable({
-      'paging'      : true,
-      'lengthChange': false,
-      'searching'   : false,
-      'ordering'    : true,
-      'info'        : true,
-      'autoWidth'   : false
+      <script type="text/javascript" src="scripts/jquery.js"></script>
+     <!--  <script type="text/javascript" src="scripts/tampil.js"></script> -->
+      
+      
+      <!--script type="text/javascript">
+      $(document).ready(function(){
+      loadData1();
       })
+      function loadData1(){
+      $.get('disconnectedtable.php', function(data){
+      $('#content1').html(data)})
+      //setTimeout(loadData1, 1000)
+      };
+      </script-->
+      
+      <script type="text/javascript">
+      $(document).ready(function(){
+      total();
       })
+      function total(){
+      $.get('totallive.php', function(data){
+      $('#totalcircuit').html(data)})
+      setTimeout(total, 1000)
+      };
       </script>
+      <script type="text/javascript">
+      $(document).ready(function(){
+      total1();
+      })
+      function total1(){
+      $.get('totallive1.php', function(data){
+      $('#totalcircuit1').html(data)})
+      setTimeout(total1, 1000)
+      };
+      </script>
+      <script type="text/javascript">
+      $(document).ready(function(){
+      total2();
+      })
+      function total2(){
+      $.get('totallive2.php', function(data){
+      $('#totalcircuit2').html(data)})
+      setTimeout(total2, 1000)
+      };
+      </script>
+    <script>
+
+      $(document).ready(function() {
+      selesai();
+      });
+      function selesai() {
+      setTimeout(function() {
+      update();
+      selesai();
+      }, 200);
+      }
+      function update() {
+      $.getJSON("tampil.php", function(data) {
+      $("tbody").empty();
+      $.each(data.result, function() {
+      $("tbody").append("<tr><td>"+this['grup']+"</td><td>"+this['sid']+
+      "</td><td>"+this['customer']+"</td><td>"+this['layanan']+
+      "</td><td>"+this['witel']+"</td><td>"+this['lokasi']+
+      "</td><td>"+this['koordinat']+"</td><td>"+this['ip']+
+      "</td><td>"+this['status']+"</td></tr>");
+      });
+      });
+      }
+
+
+      $(document).ready(function() {
+
+
+
+      var table = $('#example').DataTable({
+      select: false,
+      "columnDefs": [{
+      className: "Name",
+      "targets":[0],
+      "visible": false,
+      "searchable":false
+      }]
+      });//End of create main table
+
+      $('#example tbody').on( 'click', 'tr', function () {
+
+      alert(table.row( this ).data()[0]);
+      } );
+      });
+      </script>
+      
+      
+      
     </body>
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <div class="box-header with-border">
-              <h3 class="box-title">Edit SID</h3>
-            </div>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <!-- general form elements disabled -->
-            <div class="box box-warning">
-              
-              <!-- /.box-header -->
-              <div class="box-body">
-                <form role="form">
-                  <!-- text input -->
-                  <div class="form-group">
-                    <label>SID</label>
-                    <input type="text" class="form-control" placeholder="Enter ...">
-                  </div>
-                  <div class="form-group">
-                    <label>Customer Name</label>
-                    <input type="text" class="form-control" placeholder="Enter ...">
-                  </div>
-                  <div class="form-group">
-                    <label>Layanan</label>
-                    <input type="text" class="form-control" placeholder="Enter ...">
-                  </div>
-                  <div class="form-group">
-                    <label>Witel</label>
-                    <input type="text" class="form-control" placeholder="Enter ...">
-                  </div>
-                  
-                  <!-- textarea -->
-                  <div class="form-group">
-                    <label>Lokasi</label>
-                    <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
-                  </div>
-                  <div class="form-group">
-                    <label>Koordinat</label>
-                    <input type="text" class="form-control" placeholder="Enter ...">
-                  </div>
-                  <div class="form-group">
-                    <label>IP</label>
-                    <input type="text" class="form-control" placeholder="Enter ...">
-                  </div>
-                  <div class="form-group">
-                    <label>Status</label>
-                    <input type="text" class="form-control" placeholder="Enter ...">
-                  </div>
-                  
-                </form>
-              </div>
-              <!-- /.box-body -->
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
-          </div>
-        </div>
-      </div>
-    </div>
   </html>
+

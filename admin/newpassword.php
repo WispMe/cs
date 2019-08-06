@@ -3,9 +3,7 @@ require_once("../Config/auth.php");
 require_once("../Config/privilegeadmin.php");
 include("../Config/koneksi.php");
 $id = $_GET['id'];
-$sql = "SELECT * FROM login WHERE id = $id";
-$query = mysqli_query($con, $sql);
-$member = mysqli_fetch_assoc($query);
+
 if($_SESSION["nms"]["privilege"] = 1){
 $pri = "Admin";
 }
@@ -18,6 +16,7 @@ $pri = "Admin";
     <title>NetworkMS</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="icon" href="../assets/pic/1ico.png">
     <!-- Bootstrap 3.3.7 -->
     <link rel="stylesheet" href="../assets/bower_components/bootstrap/dist/css/bootstrap.min.css">
     <!-- Font Awesome -->
@@ -142,7 +141,7 @@ $pri = "Admin";
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>
-          User Data
+          Password
           <small></small>
           </h1>
           <ol class="breadcrumb">
@@ -156,78 +155,21 @@ $pri = "Admin";
           <!-- general form elements disabled -->
           <div class="box box-warning">
             <div class="box-header with-border">
-              <h3 class="box-title"><a href="userdata.php"> <button type="button" class="btn btn-block btn-danger" ><i class="fa fa-mail-reply"></i> Back</button></a></h3>
+              <h3 class="box-title"><a href="edituser.php"> <button type="button" class="btn btn-block btn-danger" ><i class="fa fa-mail-reply"></i> Back</button></a></h3>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <form role="form" method="post" action="proses-edit_user.php">
+              <form role="form" method="post" action="proses-pass.php">
                 <!-- text input -->
-                <input type="hidden" name="id" value="<?php echo $member['id'] ?>" />
-                <div class="form-row">
-                  <div class="col-md-6">
-                    <div class="form-group"><label for="firstname"><strong>First Name</strong></label><input class="form-control" type="text" name="firstname" value="<?php echo $member['firstname'] ?>"></div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group"><label for="lastname"><strong>Last Name</strong></label><input class="form-control" type="text"  name="lastname" value="<?php echo $member['lastname'] ?>">
-                  </div>
-                </div>
-              </div>
+                <input type="hidden" name="id" value="<?php echo $id ?>" />
               <div class="form-group col-md-12">
-                <label>Username</label>
-                <input type="text" class="form-control" placeholder="Username" name="username" value="<?php echo $member['username'] ?>" required>
+                <label>New Password</label>
+                <input type="password" class="form-control" placeholder="Password" name="password" required>
               </div>
-              <div class="form-group col-md-12">
-                <label>Telephone Number</label>
-                <input type="text" class="form-control" placeholder="Telephone Number" name="telephone" value="<?php echo $member['telephone'] ?>" required>
-              </div>
-              <div class="form-group col-md-12">
-                <label>Privilege</label>
-                <select class="form-control" name="privilege" selected="<?php echo $member['privilege'] ?>" onchange="if (this.selectedIndex== 0){
-                  document.getElementById('grup').style.visibility='hidden'}else{
-                  document.getElementById('grup').style.visibility='visible'}">
-                  <?php
-                  if($member['privilege']==0){
-                  echo '<option value="1" >Admin</option>
-                  <option value="0" selected="selected">User</option>';
-                  }
-                  else{
-                  echo '<option value="1" selected="selected">Admin</option>
-                  <option value="0" >User</option>';
-                  }
-                  ?>
-                </select>
-              </div>
-              <div class="form-group col-md-12">
-                <?php if($member['privilege']==0){
-                echo '<div id="grup" style="visibility:visible;">';
-                  }
-                  else{
-                  echo '<div id="grup" style="visibility:hidden;">';
-                    }
-                    ?>
-                    <label name="grup">Access Grup</label>
-                    <select class="form-control" name="grup">
-                      <?php
-                      $sql_grup = "SELECT grup FROM ip GROUP BY grup";
-                      $query_grup = mysqli_query($con, $sql_grup);
-                      while($result_grup = mysqli_fetch_object($query_grup)){
-                      if($member['grup'] == $result_grup->grup)
-                      {
-                        echo '<option value="'.$result_grup->grup.'" selected="selected" >'.$result_grup->grup.'</option>';
-                      }
-                      else{
-                        echo '<option value="'.$result_grup->grup.'"  >'.$result_grup->grup.'</option>';
-                      }
-                      } ?>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <br>
-                    <label><a onclick="return confirm('Are you sure?');">Reset Password?</a></label>
-                  </div>
+              
                 </div>
                 <div class="modal-footer">
-                  <button type="submit" name="submit" class="btn btn-primary">Update</button>
+                  <button type="submit" name="submit" class="btn btn-primary">Submit</button>
                 </div>
                 
                 

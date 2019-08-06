@@ -18,6 +18,7 @@ $pri = "Admin";
     <title>NetworkMS</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="icon" href="../assets/pic/1ico.png">
     <!-- Bootstrap 3.3.7 -->
     <link rel="stylesheet" href="../assets/bower_components/bootstrap/dist/css/bootstrap.min.css">
     <!-- Font Awesome -->
@@ -50,11 +51,11 @@ $pri = "Admin";
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
   </head>
-  <body class="hold-transition skin-blue sidebar-mini">
+  <body  class="hold-transition skin-blue fixed sidebar-mini">
     <div class="wrapper">
       <header class="main-header">
         <!-- Logo -->
-        <a href="index2.html" class="logo">
+        <a href="dashboard.php" class="logo">
           <!-- mini logo for sidebar mini 50x50 pixels -->
           <span class="logo-mini"><b>N</b>MS</span>
           <!-- logo for regular state and mobile devices -->
@@ -139,6 +140,18 @@ $pri = "Admin";
       </aside>
       <!-- Content Wrapper. Contains page content -->
       <div class="content-wrapper">
+         <?php
+        if(isset($_GET['success'])){
+        if($_GET['success']==1){
+        echo "
+        <div class='alert alert-success alert-dismissible'>
+          <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+          <h4><i class='icon fa fa-check'></i>Success!</h4>Change Password
+        </div>
+        ";
+        }
+        }
+        ?>
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>
@@ -223,7 +236,7 @@ $pri = "Admin";
                   </div>
                   <div class="form-group">
                     <br>
-                    <label><a onclick="return confirm('Are you sure?');">Reset Password?</a></label>
+                    <label><a onclick="return confirm('Are you sure?');" href="newpassword.php?id=<?php echo $id ?>">Reset Password?</a></label>
                   </div>
                 </div>
                 <div class="modal-footer">

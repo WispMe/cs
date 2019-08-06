@@ -23,7 +23,7 @@ if(isset($_POST['submit'])){
 	// apakah query update berhasil?
 	if( $query ) {
 		// kalau berhasil alihkan ke halaman list-siswa.php
-		header('Location: circuitdatagrup.php?grup='.$grup.'');
+		header('Location: circuitdatagrup.php?grup='.$grup.'&success=0');
 	} else {
 		// kalau gagal tampilkan pesan
 		die("Gagal menyimpan perubahan...");

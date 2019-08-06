@@ -3,8 +3,10 @@ require_once("../Config/auth.php");
 require '../Config/koneksi.php';
 require_once("../Config/privilegeadmin.php");
 if($_SESSION["nms"]["privilege"] = 1){
-  $pri = "Admin";
+$pri = "Admin";
 }
+
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -14,6 +16,7 @@ if($_SESSION["nms"]["privilege"] = 1){
     <title>NetworkMS</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+   <link rel="icon" href="../assets/pic/1ico.png">
     <!-- Bootstrap 3.3.7 -->
     <link rel="stylesheet" href="../assets/bower_components/bootstrap/dist/css/bootstrap.min.css">
     <!-- Font Awesome -->
@@ -46,11 +49,11 @@ if($_SESSION["nms"]["privilege"] = 1){
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
   </head>
-  <body class="hold-transition skin-blue sidebar-mini">
+  <body  class="hold-transition skin-blue fixed sidebar-mini">
     <div class="wrapper">
       <header class="main-header">
         <!-- Logo -->
-        <a href="index2.html" class="logo">
+        <a href="dashboard.php" class="logo">
           <!-- mini logo for sidebar mini 50x50 pixels -->
           <span class="logo-mini"><b>N</b>MS</span>
           <!-- logo for regular state and mobile devices -->
@@ -73,7 +76,7 @@ if($_SESSION["nms"]["privilege"] = 1){
                 <ul class="dropdown-menu">
                   <!-- User image -->
                   <li class="user-header">
-                    <p><?php echo $_SESSION["nms"]["firstname"] ?> 
+                    <p><?php echo $_SESSION["nms"]["firstname"] ?>
                       <?php echo $_SESSION["nms"]["lastname"] ?>
                       <small><?php echo $pri ?></small>
                     </p>
@@ -81,7 +84,7 @@ if($_SESSION["nms"]["privilege"] = 1){
                   
                   <!-- Menu Footer-->
                   <li class="user-footer">
-                   
+                    
                     <div class="pull-right">
                       <a href="../config/logout.php" class="btn btn-default btn-flat">Sign out</a>
                     </div>
@@ -134,6 +137,26 @@ if($_SESSION["nms"]["privilege"] = 1){
       </aside>
       <!-- Content Wrapper. Contains page content -->
       <div class="content-wrapper">
+        <?php
+        if(isset($_GET['success'])){
+        if($_GET['success']=='berhasil'){
+        echo "
+        <div class='alert alert-success alert-dismissible'>
+          <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+          <h4><i class='icon fa fa-check'></i>Success!</h4>Add SID
+        </div>
+        ";
+        }
+        else{
+        echo "
+        <div class='alert alert-success alert-dismissible'>
+          <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+          <h4><i class='icon fa fa-check'></i>Success!</h4>".$_GET['success']." Datas has been uploaded
+        </div>
+        ";
+        }
+        }
+        ?>
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>
@@ -152,6 +175,7 @@ if($_SESSION["nms"]["privilege"] = 1){
             <div class="box">
               <div class="box-header">
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-plus" ></i> Add SID</button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal2"><i class="fa fa-location-arrow" ></i> Upload Excel</button>
               </div>
               <!-- /.box-header -->
               <div class="box-body">
@@ -197,27 +221,7 @@ if($_SESSION["nms"]["privilege"] = 1){
       </section>
       <!-- /.content -->
       <section class="connectedSortable col-md-6">
-        <div class="box box-primary">
-          <div class="box-header with-border">
-            <h3 class="box-title">Upload Excel</h3>
-          </div>
-          <!-- /.box-header -->
-          <!-- form start -->
-          <form role="form" method="post" enctype="multipart/form-data" action="upload_aksi.php">
-            <div class="box-body">
-              <div class="form-group">
-                <label for="exampleInputFile">File input</label>
-                <input type="file" name="filepegawai" required="required">
-                <p class="help-block">File format must be .xls</p>
-              </div>
-              
-            </div>
-            <!-- /.box-body -->
-            <div class="box-footer">
-              <button type="submit" name="upload" value="import" class="btn btn-primary">Submit</button>
-            </div>
-          </form>
-        </div>
+        
       </section>
     </div>
     <!-- /.content-wrapper -->
@@ -231,7 +235,7 @@ if($_SESSION["nms"]["privilege"] = 1){
     <!-- Control Sidebar -->
     <aside class="control-sidebar control-sidebar-dark" style="display: none;">
       <!-- Create the tabs -->
-     
+      
       <!-- Tab panes -->
       <div class="tab-content">
         <!-- Home tab content -->
@@ -517,5 +521,49 @@ if($_SESSION["nms"]["privilege"] = 1){
       </div>
     </div>
   </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="box-header with-border">
+          <h3 class="box-title">Upload Excel</h3>
+        </div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- general form elements disabled -->
+        
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div class="box box-primary">
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form role="form" method="post" enctype="multipart/form-data" action="upload_aksi.php">
+              <div class="box-body">
+                <div class="form-group">
+                  <label for="exampleInputFile">File input</label>
+                  <input type="file" name="filepegawai" required="required">
+                  <p class="help-block">File format must be .xls</p>
+                </div>
+                
+              </div>
+              <!-- /.box-body -->
+              <div class="box-footer">
+                <button type="submit" name="upload" value="import" class="btn btn-primary">Submit</button>
+              </div>
+            </form>
+          </div>
+          
+          <!-- /.box-body -->
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
 </div>
 </html>

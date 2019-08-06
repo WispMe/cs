@@ -56,7 +56,8 @@ if(isset($_POST['submit'])){
     // jika query simpan berhasil, maka user sudah terdaftar
     // maka alihkan ke halaman registersukses
     if($saved){
-        header("Location: userdata.php");
+
+        header("Location: userdata.php?success=1");
     } 
     else{
         die("gagal...");
